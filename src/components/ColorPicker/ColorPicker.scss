@@ -1,0 +1,503 @@
+$color-default: #fff;
+$color-base: #272e3c;
+$color-light: #dadada;
+$font-default: 14px;
+$border-radius: 2px;
+$color-green: #08af08;
+$track-color: #eceff1;
+$thumb-color: $color-default ;
+$thumb-radius: 50%;
+$thumb-height: 8px;
+$thumb-width: 8px;
+$thumb-shadow-size: 2px;
+$thumb-shadow-blur: 2px;
+$thumb-shadow-color: rgba(0, 0, 0, .2);
+$thumb-border-width: 1px;
+$thumb-border-color: $color-light;
+$track-width: 100%;
+$track-height: 6px;
+$track-shadow-size: 1px;
+$track-shadow-blur: 1px;
+$track-shadow-color: rgba(0, 0, 0, 0);
+$track-border-width: 1px;
+$track-border-color: #eceff1;
+$track-radius: 2px;
+$contrast: 5%;
+$ie-bottom-track-color: darken($track-color, $contrast);
+$r-gradient: linear-gradient(to right, rgb(100, 0, 0) 0%, rgb(255, 0, 0) 100%);
+$g-gradient: linear-gradient(to right, rgb(0, 100, 0) 0%, rgb(0, 255, 0) 100%);
+$b-gradient: linear-gradient(to right, rgb(0, 0, 100) 0%, rgb(0, 0, 255) 100%);
+
+@mixin shadow($shadow-size, $shadow-blur, $shadow-color) {
+	box-shadow: $shadow-size $shadow-size $shadow-blur $shadow-color, 0 0 $shadow-size lighten($shadow-color, 5%);
+}
+
+@mixin track {
+	cursor: default;
+	height: $track-height;
+	transition: all .2s ease;
+	width: $track-width;
+}
+
+@mixin thumb {
+	@include shadow($thumb-shadow-size, $thumb-shadow-blur, $thumb-shadow-color);
+	background: $thumb-color;
+	border: $thumb-border-width solid $thumb-border-color;
+	border-radius: $thumb-radius;
+	box-sizing: border-box;
+	cursor: pointer;
+	height: $thumb-height;
+	width: $thumb-width;
+}
+
+.cp {
+	width: 280px;
+	padding: 4px;
+	border-radius: $border-radius;
+	background: rgba(255, 255,  255, 0.22);
+	font-size: $font-default;
+	box-sizing: border-box;
+
+	$cp :&;
+
+	&-inner {
+		display: flex;
+		justify-content: space-between;
+		flex-wrap: nowrap;
+		align-items: center;
+		background: $color-default;
+		border-radius: $border-radius;
+		border:  1px solid $color-light;
+		position: relative;
+	}
+
+	&-value {
+		border-radius: $border-radius;
+		overflow: hidden;
+
+		& > input {
+			border: 0 none;
+			height: 32px;
+			line-height: 32px;
+			padding: 0 10px;
+			margin: 0;
+			display: block;
+			outline: 0 none;
+			box-shadow: none;
+			text-transform: uppercase;
+			color: $color-base;
+
+			&:hover , &:focus, &:active {
+				outline: 0 none;
+				border: 0 none;
+			}
+		}
+	}
+
+	&-dropdown {
+		top: 100%;
+		right: 0;
+		position: absolute;
+		margin-top: 16px;
+		z-index: 999;
+		animation: slide-up 0.4s ease;
+
+		$dropDown: &;
+
+		&-arrow {
+			position: absolute;
+			right: 8px;
+			top: -10px;
+			display: inline-block;
+			font-size: 0;
+
+			&:after, &:before {
+				content: '';
+				width: 0;
+				height: 0;
+				border-style: solid;
+				border-width: 0 9px 10px;
+				margin: auto;
+				left: 0;
+				right: 0;
+			}
+
+			&:before {
+				border-color: transparent transparent rgba(0, 0, 0, 0.1);
+				top: -1px;
+				position: absolute;
+			}
+
+			&:after {
+				border-color: transparent transparent rgb(255, 255, 255);
+				top: 0;
+				position: relative;
+			}
+		}
+
+		&-inner {
+
+			padding: 10px 0;
+			background: $color-default;
+			border: 0 solid rgba(0, 0, 0, 0.25);
+			box-shadow: rgba(0, 0, 0, 0.25) 0 1px 4px;
+			border-radius: $border-radius;
+			position: relative;
+		}
+
+		&-body {
+			padding: 0 10px;
+			min-width: 200px;
+			max-height: 248px;
+			overflow: auto;
+		}
+	}
+
+	&-color {
+		width: 20px;
+		height: 20px;
+		border-radius: $border-radius;
+		display: block;
+		flex-shrink: 0;
+	}
+
+	&-list {
+		&-item {
+			color: $color-base;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			font-size: 1.2em;
+			margin-left: -10px;
+			margin-right: -10px;
+			padding: 6px 10px;
+			cursor: pointer;
+			transition: background .2s ease-in;
+			text-transform: uppercase;
+
+			&:not(:first-child) {
+				border-top: 1px solid $color-light;
+			}
+
+			&:hover {
+				background: $color-light;
+			}
+		}
+	}
+
+	&-controls {
+		display: flex;
+		align-items: center;
+		border-left: 1px solid $color-light;
+
+		&-item {
+			display: inline-block;
+			border-left: 1px solid transparent;
+
+			&:not(:first-child) {
+				border-left-color: $color-light;
+			}
+
+			&:not(:last-child){
+				#{$cp} {
+					&-dropdown {
+						#{$cp} {
+							&-dropdown-arrow {
+								right: 40px;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	&-button {
+		width: 32px;
+		height: 32px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		cursor: pointer;
+	}
+
+	&-arrow {
+		width: 0;
+		height: 0;
+		border-left: 4px solid transparent;
+		border-right: 4px solid transparent;
+		border-top: 4px solid $color-base;
+	}
+
+	&-range {
+		&-input {
+			width: 100%;
+
+			input[type='range'] {
+				-webkit-appearance: none;
+				background: transparent;
+				margin: 0;
+				width: $track-width;
+				display: block;
+
+				&::-moz-focus-outer {
+					border: 0;
+				}
+
+				&:focus {
+					outline: 0;
+
+					&::-webkit-slider-runnable-track {
+						background: lighten($track-color, $contrast);
+					}
+
+					&::-ms-fill-lower {
+						background: $track-color;
+					}
+
+					&::-ms-fill-upper {
+						background: lighten($track-color, $contrast);
+					}
+				}
+
+				&::-webkit-slider-runnable-track {
+					@include track;
+					@include shadow($track-shadow-size, $track-shadow-blur, $track-shadow-color);
+					background: $track-color;
+					border: $track-border-width solid $track-border-color;
+					border-radius: $track-radius;
+				}
+
+				&::-webkit-slider-thumb {
+					@include thumb;
+					-webkit-appearance: none;
+					margin-top: ((-$track-border-width * 2 + $track-height) / 2 - $thumb-height / 2);
+				}
+
+				&::-moz-range-track {
+					@include shadow($track-shadow-size, $track-shadow-blur, $track-shadow-color);
+					@include track;
+					background: $track-color;
+					border: $track-border-width solid $track-border-color;
+					border-radius: $track-radius;
+					height: $track-height / 2;
+				}
+
+				&::-moz-range-thumb {
+					@include thumb;
+				}
+
+				&::-ms-track {
+					@include track;
+					background: transparent;
+					border-color: transparent;
+					border-width: ($thumb-height / 2) 0;
+					color: transparent;
+				}
+
+				&::-ms-fill-lower {
+					@include shadow($track-shadow-size, $track-shadow-blur, $track-shadow-color);
+					background: $ie-bottom-track-color;
+					border: $track-border-width solid $track-border-color;
+					border-radius: ($track-radius * 2);
+				}
+
+				&::-ms-fill-upper {
+					@include shadow($track-shadow-size, $track-shadow-blur, $track-shadow-color);
+					background: $track-color;
+					border: $track-border-width solid $track-border-color;
+					border-radius: ($track-radius * 2);
+				}
+
+				&::-ms-thumb {
+					@include thumb;
+					margin-top: $track-height / 4;
+				}
+
+				&:disabled {
+					&::-webkit-slider-thumb,
+					&::-moz-range-thumb,
+					&::-ms-thumb,
+					&::-webkit-slider-runnable-track,
+					&::-ms-fill-lower,
+					&::-ms-fill-upper {
+						cursor: not-allowed;
+					}
+				}
+			}
+			input[name='r']{
+				&:focus {
+
+					&::-webkit-slider-runnable-track {
+						background: $r-gradient
+					}
+
+					&::-ms-fill-lower {
+						background: $r-gradient;
+					}
+
+					&::-ms-fill-upper {
+						background: $r-gradient
+					}
+				}
+
+				&::-webkit-slider-runnable-track {
+					background: $r-gradient;
+				}
+
+				&::-moz-range-track {
+					background: $r-gradient;
+				}
+
+
+				&::-ms-fill-lower {
+					background: $r-gradient;
+				}
+
+				&::-ms-fill-upper {
+					background: $r-gradient;
+				}
+
+			}
+			input[name='g']{
+				&:focus {
+
+					&::-webkit-slider-runnable-track {
+						background: $g-gradient
+					}
+
+					&::-ms-fill-lower {
+						background: $g-gradient;
+					}
+
+					&::-ms-fill-upper {
+						background: $g-gradient
+					}
+				}
+
+				&::-webkit-slider-runnable-track {
+					background: $g-gradient;
+				}
+
+				&::-moz-range-track {
+					background: $g-gradient;
+				}
+
+
+				&::-ms-fill-lower {
+					background: $g-gradient;
+				}
+
+				&::-ms-fill-upper {
+					background: $g-gradient;
+				}
+
+			}
+			input[name='b']{
+				&:focus {
+
+					&::-webkit-slider-runnable-track {
+						background: $b-gradient
+					}
+
+					&::-ms-fill-lower {
+						background: $b-gradient;
+					}
+
+					&::-ms-fill-upper {
+						background: $b-gradient
+					}
+				}
+
+				&::-webkit-slider-runnable-track {
+					background: $b-gradient;
+				}
+
+				&::-moz-range-track {
+					background: $b-gradient;
+				}
+
+
+				&::-ms-fill-lower {
+					background: $b-gradient;
+				}
+
+				&::-ms-fill-upper {
+					background: $b-gradient;
+				}
+
+			}
+		}
+	}
+
+	&-buttons {
+		display: flex;
+		justify-content: flex-end;
+		flex-wrap: wrap;
+		align-items: center;
+		padding: 0 10px;
+
+		& > button[type="button"] {
+			display: inline-block;
+			text-transform: uppercase;
+			width: auto;
+			height: auto;
+			margin: 2px 4px;
+			padding: 6px 12px;
+			border: 0 none;
+			outline: 0 none;
+			color: $color-base;
+			box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
+			background-color: $color-light;
+			cursor: pointer;
+			border-radius: $border-radius;
+
+			&:not(:first-child) {
+				margin-right: 0;
+			}
+
+			&:not(:last-child) {
+				margin-left: 0;
+			}
+
+			&.primary {
+				background: $color-green;
+				color: #ffffff;
+			}
+		}
+	}
+
+	&-rgb {
+		margin: 2px 0 12px;
+
+		&-item {
+			display: flex;
+			flex-wrap: nowrap;
+			align-items: center;
+			padding: 6px 0;
+		}
+
+		&-label {
+			color: $color-base;
+			font-weight: 500;
+			font-size: 1em;
+			line-height: 1;
+			width: 14px;
+			text-align: left;
+			flex-shrink: 0;
+			overflow: hidden;
+		}
+	}
+}
+
+@keyframes slide-up {
+	0% {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
